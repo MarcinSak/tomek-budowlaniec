@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Budowlaniec Tomek - Usługi Budowlane</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        /* Header & Navigation */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(44, 62, 80, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .header-scrolled {
+            background: rgba(44, 62, 80, 0.98);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #f39c12;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #f39c12;
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: white;
+            margin: 3px 0;
+            transition: 0.3s;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><polygon fill="%23ffffff08" points="0,0 1000,300 1000,1000 0,700"/></svg>');
+            background-size: cover;
+        }
+
+        .hero-content {
+            z-index: 2;
+            max-width: 800px;
+            padding: 0 2rem;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s ease forwards 0.5s;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s ease forwards 0.7s;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 15px 40px;
+            background: linear-gradient(45deg, #f39c12, #e67e22);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s ease forwards 0.9s;
+            box-shadow: 0 4px 15px rgba(243, 156, 18, 0.4);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(243, 156, 18, 0.6);
+        }
+
+        /* Floating elements */
+        .floating-elements {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+        }
+
+        .floating-element {
+            position: absolute;
+            background: rgba(243, 156, 18, 0.1);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .floating-element:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .floating-element:nth-child(2) {
+            width: 120px;
+            height: 120px;
+            top: 60%;
+            right: 15%;
+            animation-delay: -2s;
+        }
+
+        .floating-element:nth-child(3) {
+            width: 60px;
+            height: 60px;
+            top: 30%;
+            right: 30%;
+            animation-delay: -4s;
+        }
+
+        /* Sections */
+        section {
+            padding: 80px 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #2c3e50;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(45deg, #f39c12, #e67e22);
+        }
+
+        /* About Section */
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .about-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .about-image {
+            text-align: center;
+        }
+
+        .about-image img {
+            max-width: 100%;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .about-image img:hover {
+            transform: scale(1.05);
+        }
+
+        /* Services Section */
+        .services {
+            background: #f8f9fa;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .service-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(243, 156, 18, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .service-card:hover::before {
+            left: 100%;
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        }
+
+        .service-icon {
+            font-size: 3rem;
+            color: #f39c12;
+            margin-bottom: 1rem;
+        }
+
+        .service-card h3 {
+            margin-bottom: 1rem;
+            color: #2c3e50;
+        }
+
+        /* Gallery Section */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 3rem;
+        }
+
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 15px;
+            cursor: pointer;
+            aspect-ratio: 1;
+            background: #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #888;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .gallery-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(243, 156, 18, 0.8), rgba(230, 126, 34, 0.8));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .gallery-item:hover::before {
+            opacity: 1;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.05);
+        }
+
+        /* Contact Section */
+        .contact {
+            background: #2c3e50;
+            color: white;
+        }
+
+        .contact .section-title {
+            color: white;
+        }
+
+        .contact-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            margin-top: 3rem;
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .contact-item:hover {
+            background: rgba(243, 156, 18, 0.2);
+            transform: translateX(10px);
+        }
+
+        .contact-icon {
+            font-size: 1.5rem;
+            color: #f39c12;
+        }
+
+        .contact-form {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            margin-bottom: 0.5rem;
+            color: #f39c12;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #f39c12;
+            background: rgba(255,255,255,0.15);
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: rgba(255,255,255,0.7);
+        }
+
+        .submit-btn {
+            padding: 15px;
+            background: linear-gradient(45deg, #f39c12, #e67e22);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(243, 156, 18, 0.4);
+        }
+
+        /* Footer */
+        footer {
+            background: #1a252f;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* Scroll indicator */
+        .scroll-indicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 3px;
+            background: linear-gradient(45deg, #f39c12, #e67e22);
+            z-index: 9999;
+            transition: width 0.3s ease;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 70px);
+                background: rgba(44, 62, 80, 0.98);
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                transition: left 0.3s ease;
+            }
+
+            .nav-links.active {
+                left: 0;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .hamburger.active span:nth-child(1) {
+                transform: rotate(-45deg) translate(-5px, 6px);
+            }
+
+            .hamburger.active span:nth-child(2) {
+                opacity: 0;
+            }
+
+            .hamburger.active span:nth-child(3) {
+                transform: rotate(45deg) translate(-5px, -6px);
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .about-content,
+            .contact-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+
+            section {
+                padding: 60px 5%;
+            }
+        }
+
+        /* Loading animation */
+        .loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #2c3e50;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            transition: opacity 0.5s ease;
+        }
+
+        .loading.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loader {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(243, 156, 18, 0.3);
+            border-top: 4px solid #f39c12;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading" id="loading">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Scroll Indicator -->
+    <div class="scroll-indicator" id="scrollIndicator"></div>
+
+    <!-- Header -->
+    <header id="header">
+        <nav>
+            <a href="#" class="logo">Budowlaniec Tomek</a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#home" onclick="scrollToSection('home')">Strona główna</a></li>
+                <li><a href="#about" onclick="scrollToSection('about')">O nas</a></li>
+                <li><a href="#services" onclick="scrollToSection('services')">Usługi</a></li>
+                <li><a href="#gallery" onclick="scrollToSection('gallery')">Realizacje</a></li>
+                <li><a href="#contact" onclick="scrollToSection('contact')">Kontakt</a></li>
+            </ul>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="floating-elements">
+            <div class="floating-element"></div>
+            <div class="floating-element"></div>
+            <div class="floating-element"></div>
+        </div>
+        <div class="hero-content">
+            <h1>Profesjonalne Usługi Budowlane</h1>
+            <p>Solidność, doświadczenie i terminowość - budujemy Twoje marzenia od fundamentów po wykończenie</p>
+            <a href="#contact" class="cta-button" onclick="scrollToSection('contact')">Skontaktuj się z nami</a>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about">
+        <h2 class="section-title">O firmie</h2>
+        <div class="about-content">
+            <div class="about-text">
+                <p>Jesteśmy firmą budowlaną z wieloletnim doświadczeniem w branży. Specjalizujemy się w szerokiej gamie usług budowlanych - od fundamentów, poprzez murowanie, aż po wykończenia wnętrz.</p>
+                <p>Nasz zespół składa się z wykwalifikowanych specjalistów, którzy dbają o najwyższą jakość wykonywanych prac. Każdy projekt traktujemy indywidualnie, dostosowując się do potrzeb i budżetu klienta.</p>
+                <p>Gwarantujemy terminowość, rzetelność i konkurencyjne ceny. Wszystkie prace wykonujemy z zachowaniem najwyższych standardów bezpieczeństwa i jakości.</p>
+            </div>
+            <div class="about-image">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%23f39c12'/%3E%3Ctext x='200' y='150' text-anchor='middle' dy='.3em' font-family='Arial' font-size='20' fill='white'%3EZdjęcie ekipy%3C/text%3E%3C/svg%3E" alt="Ekipa budowlana">
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services" id="services">
+        <h2 class="section-title">Nasze usługi</h2>
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-icon">🏗️</div>
+                <h3>Fundamenty i konstrukcje</h3>
+                <p>Wykonujemy fundamenty pod domy, garaże i inne budynki. Specjalizujemy się w konstrukcjach żelbetowych i murowanych.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">🧱</div>
+                <h3>Murarstwo</h3>
+                <p>Wznoszenie ścian z różnych materiałów - cegła, bloczki, pustaki. Dbamy o precyzję i estetykę wykonania.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">🎨</div>
+                <h3>Wykończenia</h3>
+                <p>Kompleksowe wykończenia wnętrz - tynkowanie, malowanie, układanie płytek, montaż instalacji.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">🏠</div>
+                <h3>Remonty</h3>
+                <p>Remonty mieszkań, domów i lokali użytkowych. Od drobnych napraw po kompleksowe przebudowy.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">🔧</div>
+                <h3>Instalacje</h3>
+                <p>Instalacje wodociągowe, kanalizacyjne i grzewcze. Współpracujemy z certyfikowanymi instalatorami.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">🌿</div>
+                <h3>Ogrodzenia i tarasy</h3>
+                <p>Budowa ogrodzeń, tarasów i innych elementów architektury ogrodowej. Różne materiały i style.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section id="gallery">
+        <h2 class="section-title">Nasze realizacje</h2>
+        <div class="gallery-grid">
+            <div class="gallery-item" onclick="openGalleryModal(1)">
+                Zdjęcie realizacji 1
+            </div>
+            <div class="gallery-item" onclick="openGalleryModal(2)">
+                Zdjęcie realizacji 2
+            </div>
+            <div class="gallery-item" onclick="openGalleryModal(3)">
+                Zdjęcie realizacji 3
+            </div>
+            <div class="gallery-item" onclick="openGalleryModal(4)">
+                Zdjęcie realizacji 4
+            </div>
+            <div class="gallery-item" onclick="openGalleryModal(5)">
+                Zdjęcie realizacji 5
+            </div>
+            <div class="gallery-item" onclick="openGalleryModal(6)">
+                Zdjęcie realizacji 6
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact" id="contact">
+        <h2 class="section-title">Kontakt</h2>
+        <div class="contact-content">
+            <div class="contact-info">
+                <div class="contact-item">
+                    <div class="contact-icon">📞</div>
+                    <div>
+                        <h4>Telefon</h4>
+                        <p>+48 123 456 789</p>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">📧</div>
+                    <div>
+                        <h4>Email</h4>
+                        <p>biuro@budowlaniec-tomek.pl</p>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">📍</div>
+                    <div>
+                        <h4>Adres</h4>
+                        <p>ul. Budowlana 123<br>00-000 Warszawa</p>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">🕒</div>
+                    <div>
+                        <h4>Godziny pracy</h4>
+                        <p>Pon-Pt: 7:00-17:00<br>Sob: 8:00-14:00</p>
+                    </div>
+                </div>
+            </div>
+            <form class="contact-form" onsubmit="submitForm(event)">
+                <div class="form-group">
+                    <label for="name">Imię i nazwisko</label>
+                    <input type="text" id="name" name="name" placeholder="Twoje imię i nazwisko" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" placeholder="twoj@email.pl" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Telefon</label>
+                    <input type="tel" id="phone" name="phone" placeholder="+48 123 456 789">
+                </div>
+                <div class="form-group">
+                    <label for="message">Wiadomość</label>
+                    <textarea id="message" name="message" rows="5" placeholder="Opisz swój projekt..." required></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Wyślij wiadomość</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 Budowlaniec Tomek. Wszystkie prawa zastrzeżone.</p>
+    </footer>
+
+    <script>
+        // Loading screen
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                document.getElementById('loading').classList.add('hidden');
+            }, 1000);
+        });
+
+        // Scroll indicator
+        window.addEventListener('scroll', function() {
+            const scrollTop = window.pageYOffset;
+            const docHeight = document.body.scrollHeight - window.innerHeight;
+            const scrollPercent = (scrollTop / docHeight) * 100;
+            document.getElementById('scrollIndicator').style.width = scrollPercent + '%';
+        });
+
+        // Header scroll effect
+        window.addEventListener('scroll', function() {
+            const header = document.getElementById('header');
+            if (window.scrollY > 100) {
+                header.classList.add('header-scrolled');
+            } else {
+                header.classList.remove('header-scrolled');
+            }
+        });
+
+        // Mobile navigation
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('navLinks');
+
+        hamburger.addEventListener('click', function() {
+            hamburger.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        });
+
+        // Smooth scrolling
+        function scrollToSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            const headerHeight = 80;
+            const sectionTop = section.offsetTop - headerHeight;
+            
+            window.scrollTo({
+                top: sectionTop,
+                behavior: 'smooth'
+            });
+
+            // Close mobile menu if open
+            hamburger.classList.remove('active');
+            navLinks.classList.remove('active');
+        }
+
+        // Gallery modal (placeholder)
+        function openGalleryModal(imageId) {
+            alert(`Otwieranie galerii - zdjęcie ${imageId}. W pełnej wersji tutaj będzie modal z większym zdjęciem i opisem realizacji.`);
+        }
+
+        // Form submission
+        function submitForm(event) {
+            event.preventDefault();
+            
+            const formData = new FormData(event.target);
+            const data = {
+                name: formData.get('name'),
+                email: formData.get('email'),
+                phone: formData.get('phone'),
+                message: formData.get('message')
+            };
+
+            // Simulate form submission
+            const submitBtn = event.target.querySelector('.submit-btn');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Wysyłanie...';
+            submitBtn.disabled = true;
+
+            setTimeout(() => {
+                alert('Dziękujemy za wiadomość! Skontaktujemy się z Państwem w ciągu 24 godzin.');
+                event.target.reset();
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }, 2000);
+        }
+
+        // Scroll animations for elements
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe service cards and gallery items
+        document.addEventListener('DOMContentLoaded', function() {
+            const serviceCards = document.querySelectorAll('.service-card');
+            const galleryItems = document.querySelectorAll('.gallery-item');
+            
+            [...serviceCards, ...galleryItems].forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(30px)';
+                el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(el);
+            });
+        });
+
+        // Parallax effect for floating elements
+        window.addEventListener('scroll', function() {
+            const scrolled = window.pageYOffset;
+            const floatingElements = document.querySelectorAll('.floating-element');
+            
+            floatingElements.forEach((el, index) => {
+                const speed = 0.5 + index * 0.1;
+                el.style.transform = `translateY(${scrolled * speed}px)`;
+            });
+        });
+
+        // Add some interactive hover effects
+        document.querySelectorAll('.service-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-10px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // Dynamic typing effect for hero (optional enhancement)
+        function typeWriter(element, text, speed = 100) {
+            let i = 0;
+            element.innerHTML = '';
+            
+            function type() {
+                if (i < text.length) {
+                    element.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                }
+                        }
+            type();
+        }
+
+        // Przykład użycia efektu pisania (jeśli chcesz go aktywować)
+        // const heroHeading = document.querySelector('.hero h1');
+        // typeWriter(heroHeading, 'Profesjonalne Usługi Budowlane');
+    </script>
+</body>
+</html>
